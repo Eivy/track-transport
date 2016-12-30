@@ -10,8 +10,9 @@ import (
 	"golang.org/x/text/transform"
 )
 
-func GetStatus(numbers []string) error {
+func GetStatus(numbers []string) ([][]string, error) {
 	var value url.Values
+	r := [][]string{}
 	for i, v := range numbers {
 		if i%10 == 0 {
 			value = url.Values{
@@ -21,20 +22,20 @@ func GetStatus(numbers []string) error {
 		value.Add("number"+fmt.Sprintf("%02d", i%10+1), v)
 		if (i+1)%10 == 0 && i > 0 {
 			if d, e := post(value); e != nil {
-				return e
+				return nil, e
 			} else {
-				write(d)
+				r = append(r, parseResult(d)...)
 			}
 		}
 	}
 	if len(value) > 1 {
 		if d, e := post(value); e != nil {
-			return e
+			return nil, e
 		} else {
-			write(d)
+			r = append(r, parseResult(d)...)
 		}
 	}
-	return nil
+	return r, nil
 }
 
 func post(value url.Values) (*gq.Document, error) {
@@ -50,16 +51,18 @@ func post(value url.Values) (*gq.Document, error) {
 	return doc, nil
 }
 
-func write(doc *gq.Document) {
+func parseResult(doc *gq.Document) [][]string {
+	r := [][]string{}
 	doc.Find(".ichiran").First().Find("tr").Each(func(_ int, s *gq.Selection) {
 		if a, b := s.Attr("align"); b && a == "middle" {
 			if _, b := s.Find("input").First().Attr("value"); b {
-				fmt.Print(s.Find(".denpyo").First().Text())
-				fmt.Print(",")
-				fmt.Print(s.Find(".hiduke").First().Text())
-				fmt.Print(",")
-				fmt.Println(s.Find(".ct").First().Text())
+				tmp := []string{}
+				tmp = append(tmp, s.Find(".denpyo").First().Text())
+				tmp = append(tmp, s.Find(".hiduke").First().Text())
+				tmp = append(tmp, s.Find(".ct").First().Text())
+				r = append(r, tmp)
 			}
 		}
 	})
+	return r
 }

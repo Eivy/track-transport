@@ -11,11 +11,17 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
+		fmt.Print("Input tracking number: ")
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			if err := yamato.GetStatus([]string{scanner.Text()}); err != nil {
+			if v, err := yamato.GetStatus([]string{scanner.Text()}); err != nil {
 				exitWithError(err)
+			} else {
+				for _, value := range v {
+					fmt.Println(strings.Join(value, ","))
+				}
 			}
+			fmt.Print("Input tracking number: ")
 		}
 		if err := scanner.Err(); err != nil {
 			exitWithError(err)
@@ -27,7 +33,13 @@ func main() {
 				if err != nil {
 					exitWithError(err)
 				}
-				yamato.GetStatus(strings.Split(string(b), "\n"))
+				if v, err := yamato.GetStatus(strings.Split(string(b), "\n")); err != nil {
+					exitWithError(err)
+				} else {
+					for _, n := range v {
+						fmt.Println(strings.Join(n, ","))
+					}
+				}
 			}
 		}
 	}
