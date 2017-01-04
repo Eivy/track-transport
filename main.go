@@ -48,17 +48,20 @@ func main() {
 			output(v, csv)
 		}
 	} else {
+		const coopMsg = "\x1b[36m1:ヤマト運輸; 2:ゆうパック; 3:佐川急便; 4:福山通運;\x1b[0m"
+		const chooseCoopMsg = "\x1b[36m会社を選んでください: \x1b[0m"
+		const numberMsg = "\x1b[36m送り状番号: \x1b[0m"
 		s := bufio.NewScanner(os.Stdin)
-		fmt.Fprintln(os.Stdout, "\x1b[36m1:ヤマト運輸; 2:ゆうパック; 3:佐川急便; 4:福山通運;\x1b[0m")
-		fmt.Fprint(os.Stdout, "\x1b[36m会社を選んでください: \x1b[0m")
+		fmt.Fprintln(os.Stdout, coopMsg)
+		fmt.Fprint(os.Stdout, chooseCoopMsg)
 		for s.Scan() {
 			c := s.Text()
-			fmt.Fprint(os.Stdout, "\x1b[36m送り状番号: \x1b[0m")
+			fmt.Fprint(os.Stdout, numberMsg)
 			s.Scan()
 			n := s.Text()
 			getResultOne(c, n)
-			fmt.Fprintln(os.Stdout, "\x1b[36m1:ヤマト運輸; 2:ゆうパック; 3:佐川急便; 4:福山通運;\x1b[0m")
-			fmt.Print("\x1b[36m会社を選んでください: \x1b[0m")
+			fmt.Fprintln(os.Stdout, coopMsg)
+			fmt.Print(os.Stdout, chooseCoopMsg)
 		}
 	}
 }
