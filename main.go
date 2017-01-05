@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"io"
 	"local/transportTrack/fukutu"
 	"local/transportTrack/sagawa"
 	"local/transportTrack/yamato"
@@ -12,11 +13,13 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mattn/go-colorable"
+
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
 )
 
-// var stdOut *io.Writer
+var stdOut io.Writer
 
 func main() {
 	var pipe, csv, usage bool
@@ -26,7 +29,7 @@ func main() {
 	flag.StringVar(&file, "file", "", "specify source file")
 	flag.BoolVar(&usage, "h", false, "show this usage")
 	flag.Parse()
-	// stdOut := bufio.NewWriter(colorable.NewColorableStdout())
+	stdOut = colorable.NewColorableStdout()
 	if usage {
 		flag.Usage()
 		return
@@ -52,16 +55,16 @@ func main() {
 		const chooseCoopMsg = "\x1b[36m会社を選んでください: \x1b[0m"
 		const numberMsg = "\x1b[36m送り状番号: \x1b[0m"
 		s := bufio.NewScanner(os.Stdin)
-		fmt.Fprintln(os.Stdout, coopMsg)
-		fmt.Fprint(os.Stdout, chooseCoopMsg)
+		fmt.Fprintln(stdOut, coopMsg)
+		fmt.Fprint(stdOut, chooseCoopMsg)
 		for s.Scan() {
 			c := s.Text()
-			fmt.Fprint(os.Stdout, numberMsg)
+			fmt.Fprint(stdOut, numberMsg)
 			s.Scan()
 			n := s.Text()
 			getResultOne(c, n)
-			fmt.Fprintln(os.Stdout, coopMsg)
-			fmt.Print(os.Stdout, chooseCoopMsg)
+			fmt.Fprintln(stdOut, coopMsg)
+			fmt.Fprint(stdOut, chooseCoopMsg)
 		}
 	}
 }
