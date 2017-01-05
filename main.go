@@ -22,11 +22,8 @@ import (
 var stdOut io.Writer
 
 func main() {
-	var pipe, csv, usage bool
-	var file string
+	var pipe, usage bool
 	flag.BoolVar(&pipe, "p", false, "use pipe")
-	flag.BoolVar(&csv, "csv", false, "output csv(Shift-JIS, CRLF)")
-	flag.StringVar(&file, "file", "", "specify source file")
 	flag.BoolVar(&usage, "h", false, "show this usage")
 	flag.Parse()
 	stdOut = colorable.NewColorableStdout()
@@ -34,21 +31,25 @@ func main() {
 		flag.Usage()
 		return
 	}
+	if pipe && len(flag.Args()) > 0 {
+		fmt.Println("Can not read file with pipe flag")
+		os.Exit(99)
+	}
 	if pipe {
 		if v, err := read(os.Stdin); err != nil {
 			exitWithError(err)
 		} else {
-			output(v, csv)
+			output(v, false)
 		}
-	} else if file != "" {
-		f, err := os.Open(file)
+	} else if len(flag.Args()) == 1 {
+		f, err := os.Open(flag.Args()[0])
 		if err != nil {
 			exitWithError(err)
 		}
 		if v, err := read(f); err != nil {
 			exitWithError(err)
 		} else {
-			output(v, csv)
+			output(v, true)
 		}
 	} else {
 		const coopMsg = "\x1b[36m1:ヤマト運輸; 2:ゆうパック; 3:佐川急便; 4:福山通運;\x1b[0m"
