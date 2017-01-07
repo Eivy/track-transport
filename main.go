@@ -141,13 +141,13 @@ func getResultOne(c string, n string) {
 
 func getResult(c string, n []string) ([][]string, error) {
 	switch c {
-	case "1":
+	case "1", "ヤマト運輸":
 		return yamato.GetStatus(n)
-	case "2":
+	case "2", "ゆうパック":
 		return yupack.GetStatus(n)
-	case "3":
+	case "3", "佐川急便":
 		return sagawa.GetStatus(n)
-	case "4":
+	case "4", "福山通運":
 		return fukutu.GetStatus(n)
 	}
 	return nil, nil
