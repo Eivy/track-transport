@@ -46,6 +46,7 @@ func main() {
 		if err != nil {
 			exitWithError(err)
 		}
+		defer f.Close()
 		if v, err := read(f); err != nil {
 			exitWithError(err)
 		} else {
