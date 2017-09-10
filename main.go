@@ -6,12 +6,13 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"local/transportTrack/fukutu"
-	"local/transportTrack/sagawa"
-	"local/transportTrack/yamato"
-	"local/transportTrack/yupack"
 	"os"
 	"strings"
+
+	"github.com/Eivy/track-transport/fukutu"
+	"github.com/Eivy/track-transport/sagawa"
+	"github.com/Eivy/track-transport/yamato"
+	"github.com/Eivy/track-transport/yupack"
 
 	"github.com/mattn/go-colorable"
 

@@ -6,9 +6,10 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"local/transportTrack/sagawa"
 	"os"
 	"strings"
+
+	"github.com/Eivy/track-transport/sagawa"
 
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"

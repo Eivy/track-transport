@@ -6,9 +6,10 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"local/transportTrack/yupack"
 	"os"
 	"strings"
+
+	"github.com/Eivy/track-transport/yupack"
 
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
